@@ -1,5 +1,7 @@
 import styled from "styled-components";
+import { formatCurrency } from "../../helpers";
 
+// eslint-disable-next-line
 const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
@@ -11,7 +13,7 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-
+// eslint-disable-next-line
 const Img = styled.img`
   display: block;
   width: 6.4rem;
@@ -20,21 +22,37 @@ const Img = styled.img`
   object-position: center;
   transform: scale(1.5) translateX(-7px);
 `;
-
+// eslint-disable-next-line
 const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
 `;
-
+// eslint-disable-next-line
 const Price = styled.div`
   font-family: "Sono";
   font-weight: 600;
 `;
-
+// eslint-disable-next-line
 const Discount = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+// eslint-disable-next-line
+export default function CabinRow({ cabin }) {
+  // eslint-disable-next-line
+  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+  return (
+    <TableRow role="row">
+      <img src={image} alt="" />
+      <Cabin>{name}</Cabin>
+      <div>Fits up to {maxCapacity} guests</div>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <discountPrice>{formatCurrency(discount)}</discountPrice>
+      <button>Delete</button>
+    </TableRow>
+  );
+}
