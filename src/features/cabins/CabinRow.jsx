@@ -1,5 +1,11 @@
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import { formatCurrency } from "../../helpers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCabin } from "../../services/apiCabins";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import CreateCabinForm from "./CreateCabinForm";
 
 // eslint-disable-next-line
 const TableRow = styled.div`
@@ -13,7 +19,6 @@ const TableRow = styled.div`
     border-bottom: 1px solid var(--color-grey-100);
   }
 `;
-// eslint-disable-next-line
 const Img = styled.img`
   display: block;
   width: 6.4rem;
@@ -22,37 +27,72 @@ const Img = styled.img`
   object-position: center;
   transform: scale(1.5) translateX(-7px);
 `;
-// eslint-disable-next-line
 const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
 `;
-// eslint-disable-next-line
 const Price = styled.div`
   font-family: "Sono";
   font-weight: 600;
 `;
-// eslint-disable-next-line
 const Discount = styled.div`
   font-family: "Sono";
   font-weight: 500;
   color: var(--color-green-700);
 `;
 
-// eslint-disable-next-line
-export default function CabinRow({ cabin }) {
-  // eslint-disable-next-line
-  const { name, maxCapacity, regularPrice, discount, image } = cabin;
+const CabinRow = ({ cabin }) => {
+  const [showForm, setShowForm] = useState(false);
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+  } = cabin;
+
+  const queryClient = useQueryClient();
+  const { isLoading: isDeleting, mutate } = useMutation({
+    mutationFn: deleteCabin,
+    onSuccess: () => {
+      toast.success("Cabin deleted successfully");
+      queryClient.invalidateQueries(["cabins"]);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   return (
-    <TableRow role="row">
-      <img src={image} alt="" />
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <discountPrice>{formatCurrency(discount)}</discountPrice>
-      <button>Delete</button>
-    </TableRow>
+    <>
+      <TableRow role="row">
+        <Img src={image} alt="" />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        <Discount>{formatCurrency(discount)}</Discount>
+        <div>
+          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
+          <button onClick={() => mutate(cabinId)} disabled={isDeleting}>
+            Delete
+          </button>
+        </div>
+      </TableRow>
+      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
   );
-}
+};
+
+CabinRow.propTypes = {
+  cabin: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    maxCapacity: PropTypes.number.isRequired,
+    regularPrice: PropTypes.number.isRequired,
+    discount: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default CabinRow;
