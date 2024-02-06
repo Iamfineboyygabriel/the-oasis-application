@@ -4,10 +4,7 @@ import { formatCurrency } from "../../helpers";
 import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
-import { HiSquare2Stack } from "react-icons/hi2";
-import { CiEdit } from "react-icons/ci";
-import { HiTrash } from "react-icons/hi";
-import { useCreateCabin } from "./useCreateCabin";
+
 // eslint-disable-next-line
 const TableRow = styled.div`
   display: grid;
@@ -46,9 +43,6 @@ const Discount = styled.div`
 
 const CabinRow = ({ cabin }) => {
   const [showForm, setShowForm] = useState(false);
-  const { isDeleting, deleteCabin } = useDeleteCabin();
-  const { isCreating, createCabin } = useCreateCabin();
-
   const {
     id: cabinId,
     name,
@@ -56,19 +50,9 @@ const CabinRow = ({ cabin }) => {
     regularPrice,
     discount,
     image,
-    description,
   } = cabin;
 
-  function handleDuplicate() {
-    createCabin({
-      name: `copy of ${name}`,
-      maxCapacity,
-      regularPrice,
-      discount,
-      image,
-      description,
-    });
-  }
+  const { isDeleting, deleteCabin } = useDeleteCabin();
 
   return (
     <>
@@ -83,14 +67,9 @@ const CabinRow = ({ cabin }) => {
           <span>&mdash;</span>
         )}
         <div>
-          <button disabled={isCreating} onClick={handleDuplicate}>
-            <HiSquare2Stack />
-          </button>
-          <button onClick={() => setShowForm((show) => !show)}>
-            <CiEdit />
-          </button>
+          <button onClick={() => setShowForm((show) => !show)}>Edit</button>
           <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
-            <HiTrash />
+            Delete
           </button>
         </div>
       </TableRow>
@@ -102,7 +81,6 @@ const CabinRow = ({ cabin }) => {
 CabinRow.propTypes = {
   cabin: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    description: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     maxCapacity: PropTypes.number.isRequired,
     regularPrice: PropTypes.number.isRequired,

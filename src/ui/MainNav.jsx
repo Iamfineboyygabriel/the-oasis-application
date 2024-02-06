@@ -81,7 +81,7 @@ export default function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/users">
+          <StyledNavLink to="/settings">
             <CiSettings />
             <span>Settings</span>
           </StyledNavLink>
