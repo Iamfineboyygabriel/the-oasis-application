@@ -146,6 +146,8 @@
 
 // export default CabinRow;
 
+
+
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { formatCurrency } from "../../helpers";
