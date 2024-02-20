@@ -99,6 +99,7 @@ Row.propTypes = {
 };
 
 function Body({ data, render }) {
+  console.log("data",data);
   if (!data.length) return <Empty>No data to show at the moment</Empty>;
   return <StyledBody>{data.map(render)}</StyledBody>;
 }

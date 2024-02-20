@@ -1,6 +1,5 @@
 import styled, { css } from "styled-components";
 
-// eslint-disable-next-line
 const sizes = {
   small: css`
     font-size: 1.2rem;
@@ -21,7 +20,6 @@ const sizes = {
   `,
 };
 
-// eslint-disable-next-line
 const variations = {
   primary: css`
     color: var(--color-brand-50);
@@ -52,16 +50,16 @@ const variations = {
 
 const Button = styled.button`
   border: none;
-  border: var(--border-radius-sm);
+  border-radius: var(--border-radius-sm);  // Fix the typo here
   box-shadow: var(--shadow-sm);
 
   ${(props) => sizes[props.size]}
-  ${(props) => variations[props.variations]}
+  ${(props) => variations[props.variation]}  // Fix the typo here
 `;
 
 Button.defaultProps = {
-  variations: "primary",
-  sizes: "medium",
+  variation: "primary",  // Fix the typo here
+  size: "medium",
 };
 
 export default Button;

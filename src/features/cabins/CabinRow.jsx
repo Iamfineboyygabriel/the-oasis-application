@@ -146,11 +146,9 @@
 
 // export default CabinRow;
 
-
-
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { formatCurrency } from "../../helpers";
+import { formatCurrency } from "../../utils/helpers";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./useDeleteCabin";
 import { HiSquare2Stack } from "react-icons/hi2";
@@ -271,8 +269,9 @@ const CabinRow = ({ cabin }) => {
 
 CabinRow.propTypes = {
   cabin: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    description: PropTypes.number.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    description: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
     name: PropTypes.string.isRequired,
     maxCapacity: PropTypes.number.isRequired,
     regularPrice: PropTypes.number.isRequired,
